@@ -1,0 +1,11 @@
+---
+
+- name: Django makemigrations, run migrations and collectstatic
+  django_manage: command={{item}}
+                 app_path={{project_dir}}
+                 virtualenv={{virtualenv_dir}}
+                 settings={{django_settings_module}}
+  with_items:
+      - makemigrations
+      - migrate
+      - collectstatic

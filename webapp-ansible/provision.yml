@@ -1,0 +1,21 @@
+---
+-   name: Setting up application
+    hosts: all
+
+    become: yes
+    become_user: root
+    gather_facts: no
+
+    vars_files:
+      - shared_vars.yml
+
+
+    roles:
+      - setup
+
+    post_tasks:
+      - name: Restart Nginx and uWSGI
+        service:  name={{item}} state=restarted
+        with_items:
+          - nginx
+          - uwsgi

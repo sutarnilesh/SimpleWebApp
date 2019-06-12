@@ -1,0 +1,11 @@
+---
+- name: Installing apt packages ie. python3, nginx, uwsgi, git
+  apt: 
+    name: python3,python3-pip,uwsgi,uwsgi-emperor,uwsgi-plugin-python3,nginx-full,git
+    state: present
+    update_cache: yes
+
+- name: Install python virtualenv
+  pip3:  
+    name: virtualenv,uwsgi
+    state: present  

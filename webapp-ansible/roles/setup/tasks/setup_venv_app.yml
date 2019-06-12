@@ -1,0 +1,31 @@
+---
+- name: Remove base directory (if present)
+  file:
+    path: '{{ project_dir }}'
+    state: absent
+
+- name: Create a virtual env
+  command: "virtualenv '{{ virtualenv_dir }}'"
+
+
+- name: Clone git repository
+  git:
+    repo: '{{ git_repo }}'
+    dest: '{{ project_dir }}'
+    version: '{{ git_branch }}'
+
+- name: Install requirements.txt
+  command: "'{{ virtualenv_dir}}/bin/pip' install -r '{{ project_dir }}/{{ project_name }}/requirements.txt'"
+  
+
+- name: Change the permission of manage.py
+  command: "chmod 755 '{{ project_dir }}/{{ project_name }}/manage.py'"
+
+- name: Django makemigrations, run migrations
+  django_manage: command={{item}}
+                 app_path='{{project_dir}}/{{project_name}}'
+                 virtualenv={{virtualenv_dir}}
+                 settings={{django_settings_module}}
+  with_items:
+      - makemigrations
+      - migrate

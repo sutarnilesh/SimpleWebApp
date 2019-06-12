@@ -1,0 +1,24 @@
+---
+
+project_name: webapp
+
+document_root: /var/www
+project_dir: "{{ document_root }}/{{project_name}}"
+
+virtualenv_dir: "{{ document_root }}/venvs/{{ project_name }}"
+requirements_file: "{{project_dir}}/requirements.txt"
+
+django_settings_module: "{{ project_name }}.settings"
+git_repo: https://github.com/sutarnilesh/SimpleWebApp.git
+git_branch: master
+nginx_hostless_global_config: no
+nginx_http_port: 80
+nginx_server_name: 'localhost {{ project_name }}.local'
+nginx_dir: /etc/nginx/conf.d
+uwsgi_dir: /etc/uwsgi-emperor/vassals
+uwsgi_service_name: emperor.uwsgi
+uwsgi_module: "{{project_dir}}/{{project_name}}.wsgi:application"
+uwsgi_processes: 1
+uwsgi_threads: 1
+uwsgi_plugins: python
+uwsgi_env: []

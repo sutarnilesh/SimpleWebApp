@@ -1,0 +1,6 @@
+---
+- include: packages.yml
+- include: setup_venv_app.yml
+- include: configure_nginx_uwsgi.yml
+- include: create_service.yml
+- include: start_services.yml
