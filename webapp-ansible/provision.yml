@@ -1,6 +1,7 @@
 ---
 -   name: Setting up application
-    hosts: all
+    hosts: localhost
+    connection: local 
 
     become: yes
     become_user: root

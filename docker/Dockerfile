@@ -12,9 +12,10 @@ RUN apt-get update && \
 	python3-setuptools \
 	python3-pip \
 	nginx \
-	uwsgi-plugin-python3
+	uwsgi \
 	uwsgi-emperor \
-	sqlite3 && \
+	uwsgi-plugin-python3 && \
+	#sqlite3 && \
 	pip3 install -U pip setuptools && \
    	rm -rf /var/lib/apt/lists/*
 
@@ -23,15 +24,20 @@ RUN apt-get update && \
 RUN pip3 install uwsgi   	
 
 # setup all the configfiles
-RUN echo "daemon off;" >> /etc/nginx/nginx.conf
-COPY nginx-app.conf /etc/nginx/sites-available/default
-COPY emperoruwsgi.service /etc/supervisor/conf.d/
+#RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+#COPY nginx-app.conf /etc/nginx/sites-available/default
+COPY nginx-app.conf /etc/nginx/sites-available/simplewebapp-nginx.conf
 
+WORKDIR /home/docker/src
+
+COPY uwsgi.ini /home/docker/src
 # COPY requirements.txt and install all dependency packages
-COPY webapp/requirements.txt /home/docker/webapp/
+COPY webapp/requirements.txt /home/docker/src/webapp/
 RUN pip3 install -r /home/docker/src/webapp/requirements.txt
 
 # Add source code
 COPY webapp /home/docker/src/
 
-EXPOSE 80
+EXPOSE 8001
+
+CMD ["uwsgi", "--ini /home/docker/src/uwsgi.ini"]
